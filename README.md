@@ -23,7 +23,7 @@ Optional gasket features, fasteners and tool-clearance envelopes help visualize 
 
 Requires desktop Autodesk Fusion. No separate Python installation or packages are needed.
 
-1. **[Download UHVChamberBuilder_v1.3.1.zip]([UHVChamberBuilder_v1.3.1.zip?raw=true](https://raw.githubusercontent.com/AmLanz/UHV-Chamber-Builder/main/UHVChamberBuilder_v1.3.1.zip)** and extract it to a permanent location.
+1. **[Download UHVChamberBuilder_v1.3.1.zip]([UHVChamberBuilder_v1.3.1.zip?raw=true](https://raw.githubusercontent.com/AmLanz/UHV-Chamber-Builder/main/UHVChamberBuilder_v1.3.1.zip))** and extract it to a permanent location.
 2. Keep the inner **UHVChamberBuilder** folder intact. It directly contains `UHVChamberBuilder.py`, `UHVChamberBuilder.manifest`, `ui/`, `assets/` and `data/`.
 3. In Fusion’s **Design** workspace, open **Utilities → Add-Ins → Scripts and Add-Ins** (or press **Shift+S**).
 4. On **Add-Ins**, click **+**, choose **Script or add-in from device** if prompted, and select the inner **UHVChamberBuilder** folder.
