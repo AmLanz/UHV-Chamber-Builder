@@ -1,0 +1,26 @@
+UHV Chamber Builder
+Copyright 2026 Amon P. Lanz
+
+Licensed under the Apache License, Version 2.0.
+See LICENSE for the full license text.
+
+This is an independent project and is not affiliated with,
+endorsed by, or sponsored by Autodesk.
+
+Autodesk and Autodesk Fusion are trademarks or registered trademarks of
+Autodesk, Inc. Their names identify the host application.
+
+The bird logo artwork was provided by Amon P. Lanz.
+The clipboard implementation is shared with the author's LaserOpticsRouter
+project, also distributed under Apache-2.0.
+
+The CF dimension data was transcribed from MBE-Komponenten reference tables:
+https://www.mbe-komponenten.de/service/flange-gasket/
+Source notes, adjustments and limitations appear in docs/CF_DIMENSIONS.md.
+No affiliation with or endorsement by MBE-Komponenten is implied.
+
+Community support is provided on a best-effort basis.
+
+The software is provided "AS IS", without warranties or conditions of any
+kind, as set out in the Apache License 2.0. The license's disclaimer of
+warranty and limitation of liability apply, subject to applicable law.

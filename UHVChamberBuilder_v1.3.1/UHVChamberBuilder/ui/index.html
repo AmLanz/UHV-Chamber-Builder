@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>UHV Chamber Builder</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="heading"><div class="brand"><img class="brand-logo" src="../assets/vogel-orange.svg" alt="Amon P. Lanz’s bird logo"><div><span class="eyebrow">CHAMBER DESIGN · mm / degrees</span><h1>UHV Chamber Builder <span id="version">1.3.1</span></h1></div></div><div class="document" id="document">Connecting to Fusion…</div></div>
+    <nav aria-label="Pages"><button class="tab active" data-page="chamber">Chamber</button><button class="tab" data-page="defaults">Defaults & appearance</button><button class="tab" data-page="help">Guide</button><button class="tab" data-page="about">About / Cite</button></nav>
+  </header>
+  <div id="notice" role="status" aria-live="polite">Loading the chamber recipe…</div>
+  <main>
+    <section id="page-chamber">
+      <div class="toolbar topbar"><label class="wide">Chamber name<input id="chamber-name" aria-label="Chamber name"></label><label>Saved chamber<select id="saved"><option value="">Current draft</option></select></label><button data-action="new">New</button><button data-action="example">Load example</button><button data-action="import">Import</button><label>Export<select id="export-format"><option value="export_bundle">Recipe + tables + assets (.zip)</option><option value="export_json">Recipe (.json)</option><option value="export_report">Documentation (.md)</option></select></label><button data-action="export">Export</button></div>
+      <div class="toolbar primarybar"><button class="primary" data-action="preview">Preview all</button><button class="primary" data-action="build">Build / update all</button><button data-action="clear_preview">Clear preview</button><button data-action="validate">Validate inputs</button><span id="counts" class="summary"></span></div>
+      <div class="toolbar options" id="view-options"></div>
+      <section class="card"><div class="card-title"><h2>1 <span>Reference points</span></h2><button data-action="add-point">+ Point</button></div><div class="table-scroll" id="points"></div></section>
+      <section class="card"><div class="card-title"><h2>2 <span>Main chamber</span></h2><div class="toolbar"><select id="new-body-kind" aria-label="New body shape"><option value="sphere">Sphere</option><option value="tube">Tube</option><option value="box">Cuboid</option><option value="existing">Existing solid</option></select><button data-action="add-body">+ Body shape</button></div></div><p class="card-note">Body shapes and port necks combine into one Main chamber component.</p><div class="table-scroll" id="bodies"></div></section>
+      <section class="card"><div class="card-title"><h2>3 <span>Flanges</span></h2><div class="toolbar"><button data-action="sort-ports">Sort by flange number</button><button data-action="add-port">+ Flange</button></div></div><p class="card-note">Enter flange numbers manually; skipped numbers are allowed. ↑ / ↓ move rows. Distance starts at referenced point and ends at the outer mating face.</p><p class="card-note" id="flange-angle-note"></p><div class="table-scroll" id="ports"></div></section>
+      <section class="card"><div class="card-title"><h2>Checks & build state</h2><button data-action="refresh">Refresh</button></div><div id="issues" class="issues"></div></section>
+      <details class="card inventory-card"><summary>Geometry outside this recipe <span id="inventory-count"></span></summary><p class="card-note">Highlight before deleting. Deleting a body can affect every occurrence of its component.</p><div id="inventory"></div></details>
+    </section>
+    <section id="page-defaults" hidden>
+      <div class="card"><div class="card-title"><h2>Appearance & shared defaults</h2><button data-action="theme" id="theme-button">Switch to dark mode</button></div><p class="card-note">Changes apply to every flange inheriting that value in this chamber. Row overrides and Custom flanges keep their own values. Build / update applies changed dimensions to the model.</p><div class="toolbar pad"><button data-action="reset-defaults">Reset catalog defaults</button><button data-action="save-app-defaults">Use for new chambers</button></div><div id="default-options" class="field-grid pad"></div><p class="card-note">Gasket offset is measured along the outward flange axis, from the flange mating face to the gasket’s outer face. Zero makes those faces flush; overlap is allowed. Each gasket is a separate component inside its flange.</p></div>
+      <section class="card"><div class="card-title"><h2>Flange dimensions <span class="unit">mm</span></h2></div><div class="table-scroll" id="flange-defaults"></div><p class="card-note">DN150CF is an alias of DN160CF. DN250 OD uses 304.8 mm. Catalog: MBE reference citing ISO 3669:2020; full ISO 3669:2026 comparison pending.</p></section>
+      <section class="card"><div class="card-title"><h2>Tube stock & preferred choices</h2></div><div class="table-scroll" id="tube-defaults"></div><div id="preferred-tubes" class="field-grid pad"></div></section>
+    </section>
+    <section id="page-help" hidden>
+      <article class="card guide"><h2>Quick start</h2><ol><li>Build asks before switching the current design to <strong>Hybrid</strong>. Start with <strong>Load example → Preview all → Build / update all</strong>.</li><li>Edit points, body shapes and flanges. The <strong>+</strong> beside each row reveals its extra settings.</li><li>Save the Fusion document. Export a <strong>recipe ZIP</strong> for a portable copy with tables and selected-solid snapshots.</li></ol>
+      <h3>Coordinates</h3><p>For flanges and body shapes, <strong>azimuth</strong> is the angle from +X; a negative value selects the opposite Y half. <strong>Elevation</strong> rotates the complete frame about X, positive toward +Z on either half. Thus 0°/0° points along +X, 90°/0° along +Y, and 90°/90° along +Z. Azimuth 0° remains along +X at every elevation. Keep the reference point, face distance, absolute azimuth and roll identical for a symmetric ring. Tube-end flanges follow their tube; roll rotates the bolt pattern around the outward axis.</p>
+      <h3>Connections and updates</h3><p>Shapes and necks become one Main chamber; each flange is a component. Automatic necks can connect to other port necks regardless of row order. For an ambiguous connection, select its target or enter a manual neck length. Existing solids require manual lengths.</p><p>A row Build includes base shapes, previously built flanges and required parent necks. Build / update all applies everything, including removals. Clear preview restores the built chamber and removes recognized UHV preview leftovers from earlier runs. Previews are also cleared before saving. For sections, clear preview and use Fusion’s Inspect → Section Analysis.</p>
+      <h3>Flange numbers</h3><p>Numbers start blank. Enter a unique positive whole number before Build; gaps are allowed. ↑ / ↓ change table order. Copy inserts below the source with an empty number. Sort by flange number puts unnumbered rows last, ordered by component name. Sorting never renumbers.</p><h3>Defaults and details</h3><p>Shared dimensions and the light/dark switch are on Defaults. Deviate unlocks per-row values. Selecting a different standard size resets those overrides. Seal details, rotatable retaining geometry and fasteners are schematic; tool envelopes use your supplied dimensions.</p>
+      <h3>Gaskets</h3><p>The offset runs from the outer flange face to the outer gasket face. The gasket extends one thickness inward from that plane. Zero is flush; negative offsets place the outer face inside the flange. Overlap is allowed: each gasket stays in a separate component under its flange.</p><h3>Keep your work</h3><p>Rebuilds can replace faces and edges. Put manual finishing features in a separate copy. Export an unbuilt draft before starting another. Errors include a diagnostic-log path.</p>
+      <p>Installation: extract the complete add-in folder, then Fusion → Utilities → Scripts and Add-Ins → Add-Ins → + → select folder → Run.</p><p><a href="https://www.mbe-komponenten.de/service/flange-gasket/" target="_blank" rel="noopener noreferrer">Dimension source</a> · UHV Chamber Builder 1.3.1</p></article>
+    </section>
+    <section id="page-about" hidden>
+      <article class="card guide about">
+        <div class="about-heading"><img src="../assets/vogel-orange.svg" alt="Amon P. Lanz’s bird logo"><div><span class="eyebrow">INDEPENDENT VACUUM CHAMBER TOOLS</span><h2>UHV Chamber Builder</h2><p>Version <span id="about-version">1.3.1</span> · by <strong>Amon P. Lanz</strong></p><p>Open source · Apache License 2.0</p></div></div>
+        <p>Plan, visualize and document vacuum chambers in Autodesk Fusion using reference points, body shapes and CF flanges.</p>
+        <p class="about-links"><a href="https://github.com/AmLanz/UHV-Chamber-Builder" target="_blank" rel="noopener noreferrer">Repository &amp; downloads</a><a href="https://github.com/AmLanz/UHV-Chamber-Builder/issues" target="_blank" rel="noopener noreferrer">Report an issue</a><a href="https://github.com/AmLanz/UHV-Chamber-Builder/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">Apache 2.0 license</a></p>
+        <h3>Cite this software</h3><p>If this tool contributes to your work, a citation is appreciated. Citation is optional.</p>
+        <label class="citation-label" for="citation-text">Software citation</label><textarea id="citation-text" class="citation-box" readonly rows="3" spellcheck="false"></textarea>
+        <div class="toolbar"><button data-copy-citation="text">Copy citation</button><button data-copy-citation="bibtex">Copy BibTeX</button></div><p id="copy-status" class="detail-note" role="status" aria-live="polite"></p>
+        <details class="about-details"><summary>License, independence &amp; model limits</summary>
+          <p>This is an independent project and is not affiliated with, endorsed by, or sponsored by Autodesk.</p>
+          <p>The software is provided “AS IS”, without warranties or conditions of any kind, as set out in the Apache License 2.0. Its disclaimer of warranty and limitation of liability apply, subject to applicable law.</p>
+          <p>Geometry is for layout and reference. Seal details, rotatable retaining geometry and fasteners are schematic. Independently verify dimensions, clearances and suitability before fabrication. Community support is provided on a best-effort basis, with no guaranteed response time.</p>
+          <p>CF dimensions are based on the <a href="https://www.mbe-komponenten.de/service/flange-gasket/" target="_blank" rel="noopener noreferrer">MBE reference tables</a>; source notes and limitations are included in docs/CF_DIMENSIONS.md.</p>
+        </details>
+        <p class="about-footer">Copyright © 2026 Amon P. Lanz. LICENSE, NOTICE, CITATION.cff and CITATION.bib are included with this add-in.</p>
+      </article>
+    </section>
+  </main>
+  <footer><span id="save-status">Draft edits are saved with the Fusion document.</span><span>Reference & visualization · CF dimensions in mm</span></footer>
+  <script src="demo-data.js"></script><script src="app.js"></script><script src="about.js"></script>
+</body>
+</html>
